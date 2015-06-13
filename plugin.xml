@@ -24,5 +24,7 @@
         </config-file>
         <header-file src="src/ios/VCGeofenceMap.h" />
         <source-file src="src/ios/VCGeofenceMap.m"/>
+		
+		<framework src="MapKit.framework" />
     </platform>
 </plugin>
