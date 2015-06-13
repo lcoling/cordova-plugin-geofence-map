@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:android="http://schemas.android.com/apk/res/android" id="com.visioncritical.cordova.geofenceMap" version="0.0.1">
+    <name>geofenceMap</name>
+    <description>GeofenceMap plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>phonegap,background geolocation, geofence</keywords>
+    <repo>https://github.com/lcoling/cordova-plugin-geofence-map</repo>
+    <issue>https://github.com/lcoling/cordova-plugin-geofence-map/issues</issue>
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <js-module src="www/geofenceMap.js" name="geofenceMap">
+        <clobbers target="geofenceMap" />
+    </js-module>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+          <feature name="GeofenceMap">
+            <param name="ios-package" value="VCGeofenceMap"/>
+          </feature>
+        </config-file>
+        <header-file src="src/ios/VCGeofenceMap.h" />
+        <source-file src="src/ios/VCGeofenceMap.m"/>
+    </platform>
+</plugin>
