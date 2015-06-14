@@ -14,8 +14,8 @@
 @interface VCGeofenceLocation : NSObject<MKAnnotation>
 
 @property (nonatomic, strong) NSString *locationId;
-@property (nonatomic, readonly) NSInteger radius;
-
+@property (nonatomic, strong) NSNumber *radius;
+@property (nonatomic, strong) NSNumber *transitionType;
 
 - (id)initWithGeofence:(NSDictionary *)geofence;
 
@@ -38,8 +38,8 @@
 }
 
 @property (nonatomic, strong) IBOutlet MKMapView *mapView;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem* closeButton;
-
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *closeButton;
+@property (nonatomic, strong) IBOutlet MKUserTrackingBarButtonItem *trackUserButton;
 - (IBAction)close:(id)sender;
 
 - (id)initWithTitle:(NSString *)titleText geofences:(NSArray *)geofences;

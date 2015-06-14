@@ -72,6 +72,7 @@
 @synthesize subtitle = _subtitle;
 @synthesize radius = _radius;
 @synthesize locationId = _locationId;
+@synthesize transitionType = _transitionType;
 
 - (id)initWithGeofence:(NSDictionary *)geofence
 {
@@ -93,10 +94,13 @@
         _locationId = [geofence objectForKey:@"id"];
         _title = [geofence objectForKey:@"name"];
         
-        NSNumber *radius = [geofence objectForKey:@"radius"];
-        _radius = radius ? [radius integerValue] : 0;
+        id radius = [geofence objectForKey:@"radius"];
+        _radius = radius && [radius isKindOfClass:NSNumber.class] ? radius : [NSNumber numberWithInteger:0];
         
-        _subtitle = _radius > 0 ? [NSString stringWithFormat:@"Radius: %@m", radius, nil] : @"Radius: Unknown";
+        id transitionType = [geofence objectForKey:@"radius"];
+        _transitionType = transitionType && [transitionType isKindOfClass:NSNumber.class] ? transitionType : [NSNumber numberWithInteger:0];
+        
+        _subtitle = [self buildSubtitle];
         
         NSNumber *latitude = [geofence objectForKey:@"latitude"];
         NSNumber *longitude = [geofence objectForKey:@"longitude"];
@@ -104,6 +108,31 @@
         
     }
     return self;
+}
+
+- (NSString *)buildSubtitle
+{
+    NSString *subtitle = nil;
+    
+    NSString *transitionTypeText = nil;
+    
+    switch (_transitionType.integerValue)
+    {
+        case 2:
+            transitionTypeText = @"Exit";
+            break;
+        case 3:
+            transitionTypeText = @"Enter and exit";
+            break;
+        case 1:
+        default:
+            transitionTypeText = @"Enter";
+            break;
+    }
+    
+    subtitle = [NSString stringWithFormat:@"%@ radius: %@m", transitionTypeText, _radius, nil];
+    
+    return subtitle;
 }
 
 @end
@@ -114,6 +143,7 @@
 
 @synthesize mapView;
 @synthesize closeButton;
+@synthesize trackUserButton;
 
 - (id)initWithTitle:(NSString *)titleText geofences:(NSArray *)geofences
 {
@@ -141,8 +171,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    
 }
 
 - (IBAction)close:(id)sender
@@ -176,6 +204,10 @@
     [self.mapView setRegion:MKCoordinateRegionMakeWithDistance(self.mapView.userLocation.coordinate, 500, 500) animated:NO];
     [self addGeofencesToMapView];
     
+    self.trackUserButton = [[MKUserTrackingBarButtonItem alloc] initWithMapView:self.mapView];
+    self.trackUserButton.enabled = YES;
+    [self.navigationItem setLeftBarButtonItem:self.trackUserButton];
+    
     [self.view addSubview:self.mapView];
 }
 
@@ -184,7 +216,7 @@
     for (VCGeofenceLocation *geofence in _geofences) {
         [self.mapView addAnnotation:geofence];
         
-        MKCircle *fenceCircle = [MKCircle circleWithCenterCoordinate:geofence.coordinate radius:geofence.radius];
+        MKCircle *fenceCircle = [MKCircle circleWithCenterCoordinate:geofence.coordinate radius:geofence.radius.integerValue];
         [self.mapView addOverlay:fenceCircle];
     }
 }
