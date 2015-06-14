@@ -15,6 +15,19 @@
         <clobbers target="geofenceMap" />
     </js-module>
 
+	<!-- android -->
+	<platform name="android">
+        <config-file target="config.xml" parent="/*">
+          <feature name="GeofenceMap">
+            <param name="android-package" value="com.visioncritical.cordova.geofenceMap.GeofenceMap"/>
+          </feature>
+        </config-file>
+		
+		<source-file src="src/android/GeofenceMap.java" target-dir="src/com/visioncritical/cordova/geofenceMap" />
+		<source-file src="src/android/Geofence.java" target-dir="src/com/visioncritical/cordova/geofenceMap" />
+		<source-file src="src/android/GeofenceMapDialog.java" target-dir="src/com/visioncritical/cordova/geofenceMap" />
+	</platform>
+	
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
