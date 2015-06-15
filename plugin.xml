@@ -26,6 +26,21 @@
 		<source-file src="src/android/GeofenceMap.java" target-dir="src/com/visioncritical/cordova/geofenceMap" />
 		<source-file src="src/android/Geofence.java" target-dir="src/com/visioncritical/cordova/geofenceMap" />
 		<source-file src="src/android/GeofenceMapDialog.java" target-dir="src/com/visioncritical/cordova/geofenceMap" />
+		
+        <!-- Android manifest entries for geofenceMap -->
+		<!--
+		<!-- under application; sets API key
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"/>
+			
+		<!-- under manifest, required for google map
+	    <uses-permission android:name="android.permission.INTERNET"/>
+	    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	    <uses-feature
+	        android:glEsVersion="0x00020000"
+	        android:required="true"/>
+		-->
 	</platform>
 	
     <!-- ios -->
