@@ -1,5 +1,7 @@
 package com.visioncritical.cordova.geofenceMap;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,27 +16,25 @@ public class Geofence {
 
     private String id;
     private String name;
-    private double latitude;
-    private double longitude;
     private int radius;
     private int transitionType;
+    private LatLng coordinates;
 
     public static Geofence createInstance(JSONObject jsonObject) throws JSONException {
         Geofence inst = new Geofence();
         inst.id = jsonObject.getString("id");
-        inst.latitude = jsonObject.getDouble("latitude");
-        inst.longitude = jsonObject.getDouble("longitude");
+        double latitude = jsonObject.getDouble("latitude");
+        double longitude = jsonObject.getDouble("longitude");
         inst.name = jsonObject.getString("name");
         inst.radius = jsonObject.getInt("radius");
         inst.transitionType = jsonObject.getInt("transitionType");
+        inst.coordinates = new LatLng(latitude, longitude);
         return inst;
     }
 
     private Geofence() {
 
     }
-
-
 
     public String getId() {
         return id;
@@ -44,14 +44,6 @@ public class Geofence {
         return name;
     }
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
     public int getRadius() {
         return radius;
     }
@@ -59,4 +51,6 @@ public class Geofence {
     public int getTransitionType() {
         return transitionType;
     }
+
+    public LatLng getCoordinates() { return coordinates; }
 }
