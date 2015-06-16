@@ -161,7 +161,7 @@ public class GeofenceMap extends CordovaPlugin {
                 map.getUiSettings().setMyLocationButtonEnabled(true);
                 map.setBuildingsEnabled(true);
                 map.setIndoorEnabled(true);
-                map.setTrafficEnabled(true);
+                map.setTrafficEnabled(false);
 
 
                 for (int i = 0; i < geofences.size(); i ++) {
