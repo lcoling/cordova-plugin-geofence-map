@@ -114,7 +114,7 @@ public class GeofenceMap extends CordovaPlugin {
 
                 // Toolbar layout
                 RelativeLayout toolbar = new RelativeLayout(cordova.getActivity());
-                toolbar.setBackgroundColor(android.graphics.Color.LTGRAY);
+                toolbar.setBackgroundColor(android.graphics.Color.BLACK);
                 toolbar.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, dpToPixels(44)));
                 toolbar.setPadding(dpToPixels(2), dpToPixels(2), dpToPixels(2), dpToPixels(2));
                 toolbar.setHorizontalGravity(Gravity.RIGHT);
@@ -124,6 +124,7 @@ public class GeofenceMap extends CordovaPlugin {
                 Button close = new Button(cordova.getActivity());
                 RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
                 closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                closeLayoutParams.setMargins(dpToPixels(0),dpToPixels(0),dpToPixels(10),dpToPixels(0));
                 close.setLayoutParams(closeLayoutParams);
                 close.setId(5);
                 close.setText("Done");
@@ -133,6 +134,9 @@ public class GeofenceMap extends CordovaPlugin {
                         done();
                     }
                 });
+                close.setBackgroundColor(Color.TRANSPARENT);
+                close.setTextColor(Color.WHITE);
+                close.setTextSize(15.0f);
 
                 // now add the google map
                 GoogleMapOptions options = new GoogleMapOptions();
@@ -145,17 +149,20 @@ public class GeofenceMap extends CordovaPlugin {
                 options.camera(
                         CameraPosition.fromLatLngZoom(
                                 new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                10));
+                                15));
 
                 mapView = new MapView(cordovaActivity, options);
                 mapView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
                 mapView.onCreate(null);
+                mapView.onResume();
 
                 map = mapView.getMap();
                 map.setMyLocationEnabled(true);
                 map.getUiSettings().setMyLocationButtonEnabled(true);
                 map.setBuildingsEnabled(true);
                 map.setIndoorEnabled(true);
+                map.setTrafficEnabled(true);
+
 
                 for (int i = 0; i < geofences.size(); i ++) {
                     map.addMarker(markers.get(i));
@@ -212,9 +219,9 @@ public class GeofenceMap extends CordovaPlugin {
         return new CircleOptions()
                 .radius(geofence.getRadius())
                 .center(geofence.getCoordinates())
-                .fillColor(Color.RED)
+                .fillColor(0x200000ff)
                 .strokeColor(Color.BLACK)
-                .strokeWidth(1.0f);
+                .strokeWidth(2.0f);
     }
     /**
      * Convert our DIP units to Pixels
