@@ -45,3 +45,8 @@
 - (id)initWithTitle:(NSString *)titleText geofences:(NSArray *)geofences;
 
 @end
+
+@interface VCGeofenceMapNavigationController : UINavigationController
+
+
+@end

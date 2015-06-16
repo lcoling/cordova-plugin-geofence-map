@@ -41,7 +41,7 @@
             self.geofenceMapViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
             self.geofenceMapViewController.modalPresentationStyle = UIModalPresentationFullScreen;
             
-            UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:self.geofenceMapViewController];
+            VCGeofenceMapNavigationController* nav = [[VCGeofenceMapNavigationController alloc] initWithRootViewController:self.geofenceMapViewController];
             nav.navigationBarHidden = NO;
             nav.navigationItem.hidesBackButton = YES;
             
@@ -229,6 +229,37 @@
     circleRenderer.lineWidth = 1.0f;
     circleRenderer.alpha = 0.5;
     return circleRenderer;
+}
+
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+
+@end
+
+#pragma mark VCGeofenceMapNavigationController
+
+@implementation VCGeofenceMapNavigationController
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
 }
 
 @end
