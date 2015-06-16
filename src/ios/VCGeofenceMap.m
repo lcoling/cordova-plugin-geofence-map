@@ -225,7 +225,7 @@
 {
     MKCircleRenderer *circleRenderer = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     circleRenderer.strokeColor = [UIColor blackColor];
-    circleRenderer.fillColor = [UIColor redColor];
+    circleRenderer.fillColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:255.0f/255.0f alpha:0.2];
     circleRenderer.lineWidth = 1.0f;
     circleRenderer.alpha = 0.5;
     return circleRenderer;
