@@ -92,7 +92,7 @@
         }
         
         _locationId = [geofence objectForKey:@"id"];
-        _title = [geofence objectForKey:@"name"];
+        _title = [geofence objectForKey:@"title"];
         
         id radius = [geofence objectForKey:@"radius"];
         _radius = radius && [radius isKindOfClass:NSNumber.class] ? radius : [NSNumber numberWithInteger:0];
