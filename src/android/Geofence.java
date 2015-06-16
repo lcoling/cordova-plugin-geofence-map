@@ -25,7 +25,7 @@ public class Geofence {
         inst.id = jsonObject.getString("id");
         double latitude = jsonObject.getDouble("latitude");
         double longitude = jsonObject.getDouble("longitude");
-        inst.name = jsonObject.getString("name");
+        inst.name = jsonObject.getString("title");
         inst.radius = jsonObject.getInt("radius");
         inst.transitionType = jsonObject.getInt("transitionType");
         inst.coordinates = new LatLng(latitude, longitude);
