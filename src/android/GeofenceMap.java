@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
@@ -47,6 +47,8 @@ public class GeofenceMap extends CordovaPlugin {
     private MapView mapView = null;
     private GoogleMap map = null;
     private RetrieveLocationCommand command = null;
+
+
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -245,12 +247,16 @@ public class GeofenceMap extends CordovaPlugin {
     }
 
     private abstract class RetrieveLocationCommand implements Runnable,
-            GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+            GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
 
-        private LocationClient locationClient = null;
+        private GoogleApiClient googleApiClient = null;
 
         public RetrieveLocationCommand(Context context) {
-            locationClient = new LocationClient(context, this, this);
+            googleApiClient = new GoogleApiClient.Builder(context)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
         }
 
         @Override
@@ -259,20 +265,20 @@ public class GeofenceMap extends CordovaPlugin {
         }
 
         public void disconnect() {
-            locationClient.disconnect();
+            googleApiClient.disconnect();
         }
 
         protected abstract void executeCommand(Location currentLocation);
 
         private void findLocationAndExecuteRunnable() {
-            Location currentLocation = locationClient.getLastLocation();
+            Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             executeCommand(currentLocation);
         }
 
         private void connectToGoogleServices() {
-            if (!locationClient.isConnected() || !locationClient.isConnecting()) {
+            if (!googleApiClient.isConnected() || !googleApiClient.isConnecting()) {
                 Log.d(TAG, "Connecting location client");
-                locationClient.connect();
+                googleApiClient.connect();
             }
         }
 
@@ -282,20 +288,24 @@ public class GeofenceMap extends CordovaPlugin {
         }
 
         @Override
-        public void onConnected(Bundle arg0) {
-            LOG.d(TAG, "Google play services connected");
-            findLocationAndExecuteRunnable();
+        public void onConnectionSuspended(int i) {
+            String reason = null;
+            if (i == CAUSE_NETWORK_LOST) {
+                reason = "Network lost";
+            }
+            else if (i == CAUSE_SERVICE_DISCONNECTED) {
+                reason = "Service disconnected";
+            }
+            else {
+                reason = "Unknown";
+            }
+            LOG.d(TAG, "Connection suspended: " + reason);
         }
 
         @Override
-        public void onDisconnected() {
-            // Destroy the current location client
-            locationClient = null;
-            // Display the connection status
-            // Toast.makeText(this, DateFormat.getDateTimeInstance().format(new
-            // Date()) + ": Disconnected. Please re-connect.",
-            // Toast.LENGTH_SHORT).show();
-            LOG.d(TAG, "Google play services Disconnected");
+        public void onConnected(Bundle arg0) {
+            LOG.d(TAG, "Google play services connected");
+            findLocationAndExecuteRunnable();
         }
     }
 }
