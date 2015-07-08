@@ -35,6 +35,8 @@
 {
     NSString *_titleText;
     NSArray *_geofences;
+    VCGeofenceLocation *_recalcGeofence;
+    NSString *_recalcGeofenceId;
 }
 
 @property (nonatomic, strong) IBOutlet MKMapView *mapView;

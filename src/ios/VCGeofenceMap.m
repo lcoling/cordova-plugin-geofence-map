@@ -97,7 +97,7 @@
         id radius = [geofence objectForKey:@"radius"];
         _radius = radius && [radius isKindOfClass:NSNumber.class] ? radius : [NSNumber numberWithInteger:0];
         
-        id transitionType = [geofence objectForKey:@"radius"];
+        id transitionType = [geofence objectForKey:@"transitionType"];
         _transitionType = transitionType && [transitionType isKindOfClass:NSNumber.class] ? transitionType : [NSNumber numberWithInteger:0];
         
         _subtitle = [self buildSubtitle];
@@ -147,6 +147,8 @@
 
 - (id)initWithTitle:(NSString *)titleText geofences:(NSArray *)geofences
 {
+    _recalcGeofenceId = @"00000000-0000-0000-0000-000000000000";
+    
     if (geofences == nil)
     {
         NSLog(@"GeofenceMapPlugin - VCGeofenceMapViewController - initWithTitle:closeButtonText:geofences: - no geofences, no map");
@@ -214,6 +216,11 @@
 - (void)addGeofencesToMapView
 {
     for (VCGeofenceLocation *geofence in _geofences) {
+        
+        if ([_recalcGeofenceId isEqualToString:geofence.locationId]) {
+            _recalcGeofence = geofence;
+        }
+        
         [self.mapView addAnnotation:geofence];
         
         MKCircle *fenceCircle = [MKCircle circleWithCenterCoordinate:geofence.coordinate radius:geofence.radius.integerValue];
@@ -223,11 +230,23 @@
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
 {
+    BOOL isRecalcGeofence = NO;
+    
+    if (_recalcGeofence) {
+        MKCircle *overlayCircle = overlay;
+        isRecalcGeofence = (_recalcGeofence.coordinate.latitude == overlayCircle.coordinate.latitude) &&
+            (_recalcGeofence.coordinate.longitude == overlayCircle.coordinate.longitude) &&
+            (_recalcGeofence.radius.doubleValue == overlayCircle.radius);
+    }
+    
     MKCircleRenderer *circleRenderer = [[MKCircleRenderer alloc] initWithOverlay:overlay];
     circleRenderer.strokeColor = [UIColor blackColor];
-    circleRenderer.fillColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:255.0f/255.0f alpha:0.2];
     circleRenderer.lineWidth = 1.0f;
     circleRenderer.alpha = 0.5;
+    circleRenderer.fillColor = isRecalcGeofence ?
+        [UIColor colorWithRed:0/255.0f green:255.0f/255.0f blue:0/255.0f alpha:0.1] :
+        [UIColor colorWithRed:0/255.0f green:0/255.0f blue:255.0f/255.0f alpha:0.2];
+    
     return circleRenderer;
 }
 
