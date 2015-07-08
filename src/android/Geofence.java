@@ -10,6 +10,8 @@ import org.json.JSONObject;
  */
 public class Geofence {
 
+    private static final String RECALC_ID = "00000000-0000-0000-0000-000000000000";
+
     public static final int TRANSITION_TYPE_ENTER = 1;
     public static final int TRANSITION_TYPE_EXIT = 2;
     public static final int TRANSITION_TYPE_BOTH = 3;
@@ -53,4 +55,8 @@ public class Geofence {
     }
 
     public LatLng getCoordinates() { return coordinates; }
+
+    public boolean isRecalcGeofence() {
+        return RECALC_ID.equalsIgnoreCase(id);
+    }
 }

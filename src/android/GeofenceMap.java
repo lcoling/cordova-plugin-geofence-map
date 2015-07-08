@@ -218,10 +218,12 @@ public class GeofenceMap extends CordovaPlugin {
     }
 
     private CircleOptions buildCircleOptionsFromGeofence(Geofence geofence) {
+        int fillColor = geofence.isRecalcGeofence() ? 0x2000ff00 : 0x200000ff;
+
         return new CircleOptions()
                 .radius(geofence.getRadius())
                 .center(geofence.getCoordinates())
-                .fillColor(0x200000ff)
+                .fillColor(fillColor)
                 .strokeColor(Color.BLACK)
                 .strokeWidth(2.0f);
     }
