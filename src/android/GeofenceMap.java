@@ -148,10 +148,23 @@ public class GeofenceMap extends CordovaPlugin {
                 options.rotateGesturesEnabled(true);
                 options.tiltGesturesEnabled(false);
                 options.zoomGesturesEnabled(true);
-                options.camera(
-                        CameraPosition.fromLatLngZoom(
-                                new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                15));
+
+                LatLng cameraPos = null;
+
+                for (int i = 0; i < geofences.size(); i ++) {
+                    Geofence current = geofences.get(i);
+                    if (current.isRecalcGeofence()) {
+                        cameraPos = new LatLng(current.getCoordinates().latitude, current.getCoordinates().longitude);
+                        break;
+                    }
+                }
+
+                if ((cameraPos == null) && (currentLocation != null)) {
+                    cameraPos = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                }
+
+                if (cameraPos != null)
+                    options.camera(CameraPosition.fromLatLngZoom(cameraPos, 15));
 
                 mapView = new MapView(cordovaActivity, options);
                 mapView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
