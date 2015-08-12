@@ -203,8 +203,18 @@
     self.mapView.showsBuildings = YES;
     self.mapView.showsUserLocation = YES;
     [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:NO];
-    [self.mapView setRegion:MKCoordinateRegionMakeWithDistance(self.mapView.userLocation.coordinate, 500, 500) animated:NO];
+
     [self addGeofencesToMapView];
+    
+    if (_recalcGeofence != nil)
+    {
+        [self.mapView setRegion:MKCoordinateRegionMakeWithDistance(_recalcGeofence.coordinate, 500, 500) animated:NO];
+    }
+    else
+    {
+        [self.mapView setRegion:MKCoordinateRegionMakeWithDistance(self.mapView.userLocation.coordinate, 500, 500) animated:NO];
+    }
+
     
     self.trackUserButton = [[MKUserTrackingBarButtonItem alloc] initWithMapView:self.mapView];
     self.trackUserButton.enabled = YES;
